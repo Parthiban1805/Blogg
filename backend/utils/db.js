@@ -9,4 +9,4 @@ const DBcon =async()=>{
         console.log("MongoDB error",error)
     }
 }
-export default DBcon
+export default DBcon    
