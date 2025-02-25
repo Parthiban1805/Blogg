@@ -10,6 +10,11 @@ const PostSchema=new mongoose.Schema({
     image:{
         type:String,
     },
+    category: {  
+        type: String,
+        required: true,
+        enum: ['Competitions', 'Achievements', 'Project', 'Placement', 'Product development', 'Start-up']
+    },
     comments:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"comments"

@@ -5,13 +5,24 @@ import path from 'path'
 
 const Create =async(req,res)=>{
     try {
-        const {title,desc}=req.body
+        // console.log('Request Body:', req.body); 
+        // console.log('Uploaded File:', req.file); 
+        const {title,desc,category}=req.body
+       
+        if (!title || !desc || !category) {
+            return res.status(400).json({ success: false, message: 'Title, description, and category are required' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'Image file is required' });
+        }
         // res.send("Hello from blog")
         const imagePath=req.file.filename
         const CreateBlog= new PostModel({
             title, 
             desc,
-            image:imagePath 
+            image:imagePath,
+            category
         })
         await CreateBlog.save()
         return res.status(201).json({
@@ -20,7 +31,7 @@ const Create =async(req,res)=>{
             post:CreateBlog
         })
     } catch (error) {
-        console.log(error);
+        console.error('Error in Create Controller:', error);
         return res.status(500).json({success:false,message:"Internal server error"})
     }
 }

@@ -3,8 +3,10 @@ export const BaseUrl='http://localhost:8000'
 
 const instance=axios.create({
     baseURL:BaseUrl,
-    withCredentials:true
+    withCredentials:true,
+    
 })
+
 
 export const get =(url,params)=>instance.get(url,(params))
 export const post=(url,data)=>instance.post(url,data)

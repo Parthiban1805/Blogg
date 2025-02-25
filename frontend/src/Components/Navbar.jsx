@@ -1,10 +1,33 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import logo from '../images/logo3.png'
+import { useDispatch, useSelector } from 'react-redux'
+import { BaseUrl } from '../services/Endpoint'
+import { RemoveUser } from '../redux/AuthSlice'
+import axios from 'axios'
+import { toast } from 'react-hot-toast'
 
 const Navbar = () => {
     
-    const [isLogin, setIsLogin] = useState(true)
+    const [isLogin, setIsLogin] = useState(false)
+    const dispatch =useDispatch()
+    const navigate=useNavigate()
+    const user=useSelector((state)=>state.auth.user)
+    const handleLogout=async()=>{
+      try {
+        const response=await axios.post (`${BaseUrl}/auth/logout`)
+        const data = response.data
+        console.log(data)
+        if (response.status==200) {
+          navigate('/')
+          dispatch(RemoveUser())
+          toast.success("Logout Successfully")
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
 
   return (
    <>
@@ -17,18 +40,18 @@ const Navbar = () => {
    </Link>
    <div className="d-flex align-items-center">
 
-   {!isLogin ? <Link to={'/login'}><button className="btn_sign mx-3">Sign in</button></Link> :(
+   {!user ? <Link to={'/login'}><button className="btn_sign mx-3">Sign in</button></Link> :(
      <div className="dropdown">
-     <div className="avatar-container pointer rounded-circle overflow-hidden bg-info" data-bs-toggle="dropdown" aria-expanded="false" style={{ width: '40px', height: '40px', cursor: "pointer" }}>
+     <div className="avatar-container pointer rounded-circle overflow-hidden bg-info" data-bs-toggle="dropdown" aria-expanded="false" style={{ width: '60px', height: '60px', cursor: "pointer" }}>
 
-     <img className="img-fluid h-100 w-100 " style={{objectFit:"cover"}} src="https://img.freepik.com/free-photo/portrait-young-handsome-man-jean-shirt-smiling-with-crossed-arms_176420-12083.jpg?ga=GA1.1.749508214.1739944068&semt=ais_hybrid" alt="" />
+     <img className="img-fluid h-100 w-100 " style={{objectFit:"cover"}} src={`${BaseUrl}/images/${user.profile}`} alt="" />
 
      </div>
      <ul className="dropdown-menu dropdown-menu-end dropdown-menu-dark">
           
-       <li><Link className="dropdown-item" to="/dashboard">Dashboard</Link></li> 
+     {user.role=='admin' ?   <li><Link className="dropdown-item" to="/dashboard">Dashboard</Link></li> :" "}
        <li><Link className="dropdown-item" to={`/profile/1234`}>Profile</Link></li>
-       <li><a className="dropdown-item "  style={{cursor:"pointer"}}>Sign Out</a></li>
+       <li><a className="dropdown-item "  style={{cursor:"pointer"}} onClick={handleLogout} >Sign Out</a></li>
          </ul>
 
       </div>

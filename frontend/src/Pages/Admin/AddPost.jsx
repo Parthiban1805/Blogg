@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
+import { post } from '../../services/Endpoint';
+import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 
 const AddPost = () => {
-  // Form data state
-  const [formData, setFormData] = useState({
+  const user = useSelector((state) => state.auth.user);
+  const [postData, setPostData] = useState({
     image: null,
     title: '',
     description: '',
     category: ''
   });
 
-  // Categories array
   const categories = [
-    
     'Competitions',
     'Achievements',
     'Project',
@@ -20,40 +21,68 @@ const AddPost = () => {
     'Start-up'
   ];
 
-  // Category dropdown state
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('Select Category');
 
-  // const handleInputChange = (e) => {
-  //   const { id, value } = e.target;
-  //   setFormData(prevState => ({
-  //     ...prevState,
-  //     [id]: value
-  //   }));
-  // };
-
-  // const handleImageChange = (e) => {
-  //   setFormData(prevState => ({
-  //     ...prevState,
-  //     image: e.target.files[0]
-  //   }));
-  // };
-
-  // const handleCategorySelect = (category) => {
-  //   setSelectedCategory(category);
-  //   setFormData(prevState => ({
-  //     ...prevState,
-  //     category: category
-  //   }));
-  //   setShowDropdown(false);
-  // };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Here you would handle the form submission
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setPostData(prevState => ({
+      ...prevState,
+      [id]: value
+    }));
   };
 
+  const handleImageChange = (e) => {
+    setPostData(prevState => ({
+      ...prevState,
+      image: e.target.files[0]
+    }));
+  };
+
+  const handleCategorySelect = (category) => {
+    setPostData(prevState => ({
+      ...prevState,
+      category: category
+    }));
+    setShowDropdown(false);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Create a new FormData object
+    const data = new FormData();
+
+    // Append fields from postData to the FormData object
+    data.append('title', postData.title);
+    data.append('desc', postData.description);
+    data.append('category', postData.category);
+    if (postData.image) {
+        data.append('postimage', postData.image); // Ensure the field name matches Multer's expectation
+    }
+
+    try {
+        const response = await post('/blog/create', data, {
+            headers: {
+                'Content-Type': 'multipart/form-data', // Required for file uploads
+            },
+            withCredentials: true,
+        });
+
+        if (response.data.success) {
+            toast.success('Post created successfully');
+            // Reset the form after successful submission
+            setPostData({
+                image: null,
+                title: '',
+                description: '',
+                category: ''
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        toast.error(error.response?.data?.message || 'Failed to create post');
+    }
+};
   return (
     <div className="container">
       <div className="row justify-content-center">
@@ -70,10 +99,11 @@ const AddPost = () => {
                     <button 
                       className="btn btn-dark dropdown-toggle w-100" 
                       type="button"
+                      id="category"
                       onClick={() => setShowDropdown(!showDropdown)}
                       aria-expanded={showDropdown}
                     >
-                      {formData.category || 'Choose a category...'}
+                      {postData.category || 'Choose a category...'}
                     </button>
                     <ul className={`dropdown-menu w-100 ${showDropdown ? 'show' : ''}`}>
                       {categories.map((category) => (
@@ -81,10 +111,10 @@ const AddPost = () => {
                           <a 
                             className="dropdown-item" 
                             href="#"
-                            // onClick={(e) => {
-                            //   e.preventDefault();
-                            //   handleCategorySelect(category);
-                            // }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleCategorySelect(category);
+                            }}
                           >
                             {category}
                           </a>
@@ -100,7 +130,7 @@ const AddPost = () => {
                     type="file" 
                     className="form-control" 
                     id="image"
-                    // onChange={handleImageChange}
+                    onChange={handleImageChange}
                     required
                   />
                 </div>
@@ -111,8 +141,8 @@ const AddPost = () => {
                     type="text" 
                     className="form-control" 
                     id="title"
-                    // value={formData.title}
-                    // onChange={handleInputChange}
+                    value={postData.title}
+                    onChange={handleInputChange}
                     placeholder="Enter post title"
                     required
                   />
@@ -123,8 +153,8 @@ const AddPost = () => {
                   <textarea 
                     className="form-control" 
                     id="description"
-                    // value={formData.description}
-                    // onChange={handleInputChange}
+                    value={postData.description}
+                    onChange={handleInputChange}
                     rows="8" 
                     placeholder="Write your post description here"
                     required
@@ -135,7 +165,7 @@ const AddPost = () => {
                   <button 
                     type="submit" 
                     className="btn btn-dark btn-lg"
-                    disabled={!formData.category} // Disable if no category selected
+                    disabled={!postData.category}
                   >
                     Submit Post
                   </button>
