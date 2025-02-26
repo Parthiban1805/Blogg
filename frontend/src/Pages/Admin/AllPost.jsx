@@ -33,7 +33,7 @@ const AllPost = () => {
         console.error('Error deleting user:', error);
    
         if (error.response && error.response.data && error.response.data.message) {
-            // setError(error.response.data.message); // Set error message from server response
+            
             toast.error(error.response.data.message)
         } else {
             toast.error("An unexpected error occurred. Please try again.");
@@ -49,8 +49,8 @@ const AllPost = () => {
           const data= resposne.data
           const sortedPosts = data.posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setPosts(sortedPosts);
-        //  setPosts(data.posts)
-          console.log(data)
+        
+          // console.log(data)
       } catch (error) {
         console.log(error)
       }

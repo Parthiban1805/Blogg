@@ -1,15 +1,17 @@
-
-*{
+* {
   padding: 0;
   margin: 0;
 }
-body{
+
+body {
   background-color: black;
 }
-.navbar{
+
+.navbar {
   background-color: rgb(0, 17, 46);
 }
-.btn_sign{
+
+.btn_sign {
   color: white;
   background-color: rgb(79, 74, 161);
   margin-right: 60px;
@@ -21,50 +23,109 @@ body{
   border-radius: 10px;
   cursor: pointer;
 }
-.login{
-  background-image: url('https://img.freepik.com/premium-photo/dark-blue-link-technology-background_769134-179.jpg?uid=R153508185&ga=GA1.1.749508214.1739944068&semt=ais_hybrid');
-  background-size: cover;
-  background-position: center;
-}
-.register{
+
+.login,
+.register {
   background-image: url('https://img.freepik.com/premium-photo/dark-blue-link-technology-background_769134-179.jpg?uid=R153508185&ga=GA1.1.749508214.1739944068&semt=ais_hybrid');
   background-size: cover;
   background-position: center;
 }
 
-.hero-section{
+/* Hero Section */
+.hero-section {
   position: relative;
-  padding: 230px 20px;
+  overflow: hidden;
+  height: 50vh; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-scroll-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  scroll-snap-type: x mandatory;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.image-scroll-item {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  /* background-position: center; */
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url('https://img.freepik.com/premium-photo/mock-up-empty-space-digital-frame-background-pointing-finger-by-3d-rendering-robot-advertising-data-learning-marketing-information-ai-robotic-presenter-artificial-intelligence-technology_36367-8016.jpg?w=1380');
-  background-size: cover;
-  background-position: top;
+  text-align: center;
   color: white;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
 }
-.hero-section h1, 
-.hero-section p {
-  color: black !important;
+
+/* Manual Scroll Buttons */
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 24px;
+  z-index: 10;
 }
 
-.profile-container{
+.scroll-button.prev {
+  left: 10px;
+}
+
+.scroll-button.next {
+  right: 10px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 24px;
+  }
+
+  .hero-section p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section h1 {
+    font-size: 20px;
+  }
+
+  .hero-section p {
+    font-size: 14px;
+  }
+}
+
+.profile-container {
   max-width: 400px;
   margin: 50px auto;
-  background-color: #1A202C;
+  background-color: #1a202c;
   padding: 30px;
   border-radius: 10px;
-  box-shadow:0px 0px 15px rgba(0, 0, 0, 0.7) ;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
 }
-.profile-title{
+
+.profile-title {
   color: white;
   text-align: center;
   margin-bottom: 20px;
   font-size: 24px;
 }
-.profile-image-section{
+
+.profile-image-section {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,72 +133,83 @@ body{
   position: relative;
   margin-bottom: 20px;
 }
-.profile-image-label{
+
+.profile-image-label {
   cursor: pointer;
   display: inline-block;
   position: relative;
 }
-.profile-image{
+
+.profile-image {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border:2px solid #4A5568;
+  border: 2px solid #4a5568;
 }
-.profile-placeholder{
+
+.profile-placeholder {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background-color: #2D3748;
+  background-color: #2d3748;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid #4A5568;
+  border: 2px solid #4a5568;
 }
-.profile-icon{
-  color: #A0AEC0;
+
+.profile-icon {
+  color: #a0aec0;
   font-size: 40px;
 }
-.profile-camera-icon{
+
+.profile-camera-icon {
   position: absolute;
   bottom: 5px;
   right: 5px;
-  background-color: #4A5568;
+  background-color: #4a5568;
   color: white;
   padding: 5px;
   border-radius: 50%;
   font-size: 30px;
 }
-.profile-image-input{
+
+.profile-image-input {
   display: none;
 }
-.input-group{
+
+.input-group {
   width: 100%;
   margin-bottom: 15px;
   position: relative;
 }
-.input-icon{
+
+.input-icon {
   position: absolute;
   top: 10px;
   left: 10px;
-  color: #A0AEC0;
+  color: #a0aec0;
 }
-.profile-input{
+
+.profile-input {
   width: 100%;
   padding: 10px 10px 10px 40px;
-  background-color: #2D3748;
+  background-color: #2d3748;
   color: white;
   border: none;
   border-radius: 5px;
   outline: none;
 }
-.profile-input::placeholder{
-  color: #A0AEC0;
+
+.profile-input::placeholder {
+  color: #a0aec0;
 }
-.profile-button{
+
+.profile-button {
   width: 100%;
   padding: 10px;
-  background-color: #3182CE;
+  background-color: #3182ce;
   color: white;
   border: none;
   border-radius: 5px;
@@ -145,6 +217,9 @@ body{
   font-size: 16px;
   transition: background-color 0.3s ease;
 }
-.profile-button:hover{
-  background-color: #2B6CB0;
+
+.profile-button:hover {
+  background-color: #2b6cb0;
 }
+
+

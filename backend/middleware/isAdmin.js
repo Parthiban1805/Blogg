@@ -4,7 +4,7 @@ import UserModel from '../models/user.js'
 
 const isAdmin =async(req,res,next)=>{
     try {
-        console.log('Cookies:', req.cookies);
+        // console.log('Cookies:', req.cookies);
         
         const token=req.cookies.token
         

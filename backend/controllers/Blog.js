@@ -39,7 +39,7 @@ const Create =async(req,res)=>{
 const deletePost=async(req,res)=>{
     try {
         const postId=req.params.id
-        const FindPost =await PostModel.findOne(postId)
+        const FindPost =await PostModel.findOne({ _id: postId })
         if(!FindPost){
             return res.status(404).json({success:false,message:"Post not found"})
         }
@@ -49,7 +49,7 @@ const deletePost=async(req,res)=>{
             .then(()=>console.log('Post image deleted'))
             .catch(error=>console.log('error deleting post image',error))
         }
-        const deletedPost =await PostModel.findById(postId)
+        const deletedPost =await PostModel.findByIdAndDelete(postId)
         return res.status(200).json({success:true,message:"Post deleted Successfully",post:deletedPost})
     } catch (error) {
         console.log(error);
