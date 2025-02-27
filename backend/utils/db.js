@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const DBcon =async()=>{
     try {
-        mongoose.connect('mongodb://127.0.0.1:27017/blogg')
+        mongoose.connect(process.env.MONGODB_URL)
         
         console.log("MongoDB is connected")
     } catch (error) {
@@ -10,3 +13,6 @@ const DBcon =async()=>{
     }
 }
 export default DBcon    
+
+
+
