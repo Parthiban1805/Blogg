@@ -15,7 +15,8 @@ const app = express()
 const PORT=process.env.PORT || 8000
 const corsOptions={
     // origin:'https://blogg-client-six.vercel.app/' || true,
-    origin:[process.env.FRONTEND_URL,true],
+    // origin:[process.env.FRONTEND_URL,true],
+    origin:'*',
     credentials:true
 }
 
