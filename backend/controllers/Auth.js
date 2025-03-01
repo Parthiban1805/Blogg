@@ -8,6 +8,7 @@ dotenv.config()
 
 const Register = async(req,res)=>{
     try {
+        
        
         const {FullName,email,password}=req.body
         // const email='sabarevijay2001@gmail.com'
