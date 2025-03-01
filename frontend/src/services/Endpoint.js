@@ -4,6 +4,9 @@ export const BaseUrl=import.meta.env.VITE_SERVER_APP_URL
 const instance=axios.create({
     baseURL:BaseUrl,
     withCredentials:true,
+    headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+      }
     
 })
 
