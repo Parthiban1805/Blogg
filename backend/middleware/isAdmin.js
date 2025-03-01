@@ -30,13 +30,10 @@ const isAdmin =async(req,res,next)=>{
 
 const isLogin=async(req,res,next)=>{
     try {
-        const authHeader = req.headers.authorization;
-        const token = authHeader && authHeader.split(' ')[1];
-        console.log('Authorization header:', authHeader);
-        console.log('Token from header:', token);
-        // const token=req.cookies.token
-        // console.log('Cookies:', req.cookies); 
-        // console.log('Token:', token);
+       
+        const token=req.cookies.token
+        console.log('Cookies:', req.cookies); 
+        console.log('Token:', token);
         if (!token) {
             return res.status(401).json({message:`Unauthorized: No token provided`})  
         }
