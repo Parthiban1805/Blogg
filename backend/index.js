@@ -14,7 +14,7 @@ dotenv.config()
 const app = express()
 const PORT=process.env.PORT || 8000
 const corsOptions={
-    origin:'https://blogg-client-six.vercel.app/',
+    origin:'https://blogg-client-six.vercel.app',
     // origin:[process.env.FRONTEND_URL],
     // origin:'*',
     credentials:true
