@@ -60,14 +60,16 @@ const Login=async(req,res)=>{
 
 
         const token=jwt.sign({userId:FindUser._id},process.env.JWT_SECRET)
-        res.cookie('token',token,{
-            httpOnly:true,
-            secure:true,
-            domain: '.onrender.com',
-            // secure: process.env.NODE_ENV === 'production',
-            maxAge:3*24*60*60*1000
-        })
+        console.log("Generated Token:", token);
 
+        res.cookie("token", token, {
+            httpOnly: true, 
+            secure: true,
+            sameSite: "None",
+            domain: "localhost", 
+            maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
+          });
+          
         res.status(200).json({success:true,message:"Login successfully",user:FindUser,token:token})
     } catch (error) {
         console.log(error);

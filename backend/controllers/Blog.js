@@ -2,37 +2,43 @@ import PostModel from "../models/Blog.js"
 import fs from 'fs'
 import path from 'path'
 
+import jwt from 'jsonwebtoken'; 
+import cookieParser from 'cookie-parser';
 
 const Create =async(req,res)=>{
     try {
-        // console.log('Request Body:', req.body); 
-        // console.log('Uploaded File:', req.file); 
-        const {title,desc,category}=req.body
-       
+        console.log('Cookies:', req.cookies);
+        console.log('Headers:', req.headers);
+
+        const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
+        console.log('Extracted Token:', token);
+
+        if (!token) {
+            return res.status(401).json({ success: false, message: 'Unauthorized: No token provided' });
+        }
+
+        const decoded = jwt.verify(token, 'THIS IS BLOG APP');
+        console.log('Decoded User:', decoded);
+
+        const { title, desc, category } = req.body;
+
         if (!title || !desc || !category) {
-            return res.status(400).json({ success: false, message: 'Title, description, and category are required' });
+            return res.status(400).json({ success: false, message: 'All fields are required' });
         }
 
         if (!req.file) {
             return res.status(400).json({ success: false, message: 'Image file is required' });
         }
-        // res.send("Hello from blog")
-        const imagePath=req.file.filename
-        const CreateBlog= new PostModel({
-            title, 
-            desc,
-            image:imagePath,
-            category
-        })
-        await CreateBlog.save()
+
+        const imagePath = req.file.filename;
         return res.status(201).json({
-            success:true,
-            message:"Post Created Successfully",
-            post:CreateBlog
-        })
+            success: true,
+            message: "Post Created Successfully",
+            post: { title, desc, image: imagePath, category }
+        });
     } catch (error) {
-        console.error('Error in Create Controller:', error);
-        return res.status(500).json({success:false,message:"Internal server error"})
+        console.error('Error:', error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
 

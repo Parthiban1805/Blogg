@@ -26,6 +26,7 @@ app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(express.json())
 
+
 app.get("/",(req,res)=>{
     res.send("Hello from backend ")
 })

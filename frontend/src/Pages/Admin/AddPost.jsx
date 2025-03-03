@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 
 const AddPost = () => {
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth.user); // Get user from Redux
   const [postData, setPostData] = useState({
     image: null,
     title: '',
@@ -51,38 +51,34 @@ const AddPost = () => {
 
     // Create a new FormData object
     const data = new FormData();
-
-    // Append fields from postData to the FormData object
     data.append('title', postData.title);
     data.append('desc', postData.description);
     data.append('category', postData.category);
     if (postData.image) {
-        data.append('postimage', postData.image); // Ensure the field name matches Multer's expectation
+      data.append('postimage', postData.image); // Ensure field name matches Multer's expectation
     }
+
+    console.log('User Token:', user?.token); // Debugging token before request
 
     try {
-        const response = await post('/blog/create', data, {
-            headers: {
-                'Content-Type': 'multipart/form-data', // Required for file uploads
-            },
-            withCredentials: true,
-        });
+      const response = await post('blog/create', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${user?.token}`, // Sending token in header
+        },
+        withCredentials: true, 
+      });
 
-        if (response.data.success) {
-            toast.success('Post created successfully');
-            // Reset the form after successful submission
-            setPostData({
-                image: null,
-                title: '',
-                description: '',
-                category: ''
-            });
-        }
+      if (response.data.success) {
+        toast.success('Post created successfully');
+        setPostData({ image: null, title: '', description: '', category: '' });
+      }
     } catch (error) {
-        console.error(error);
-        toast.error(error.response?.data?.message || 'Failed to create post');
+      console.error(error);
+      toast.error(error.response?.data?.message || 'Failed to create post');
     }
-};
+  };
+
   return (
     <div className="container">
       <div className="row justify-content-center">
